@@ -2,6 +2,15 @@ import React from 'react';
 
 import styled from '../styled';
 
+const ImageContainer = styled.div`
+  width: 4rem;
+  height: 4rem;
+  margin: 0 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const StyledButton = styled.button`
   font-family: '${(props) => props.theme.fonts.body}';
   background-color: ${(props) => props.theme.colors.white};
@@ -27,22 +36,17 @@ const StyledButton = styled.button`
   &:hover {
     cursor: pointer;
   }
-
-  .selectable-button-img {
-    width: 4rem;
-    height: 4rem;
-    margin: 0 1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 75%;
-  }
 `;
+
+interface SelectableButtonComposition {
+  ImageContainer: React.FC<{}>;
+
+}
 
 const SelectableButton: React.FC<{
   isSelected?: boolean;
   onClick: () => void;
-}> = ({ isSelected = false, onClick, children }) => {
+}> & SelectableButtonComposition = ({ isSelected = false, onClick, children }) => {
   return (
     <StyledButton
       className={isSelected ? 'active' : ''}
@@ -52,5 +56,7 @@ const SelectableButton: React.FC<{
     </StyledButton>
   );
 };
+
+SelectableButton.ImageContainer = ImageContainer;
 
 export default SelectableButton;

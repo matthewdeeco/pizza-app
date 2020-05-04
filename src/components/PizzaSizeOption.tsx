@@ -11,13 +11,14 @@ const PizzaSizeOption: React.FC<{
 }> = ({ name, price, pizzaSize = '100%', isSelected = false, onClick }) => {
   return (
     <SelectableButton isSelected={isSelected} onClick={() => onClick()}>
-      <img
-        className="selectable-button-img"
-        width={pizzaSize}
-        height={pizzaSize}
-        alt=""
-        src="/pizza128.png"
-      />
+      <SelectableButton.ImageContainer>
+        <img
+          width={pizzaSize}
+          height={pizzaSize}
+          alt=""
+          src="/pizza128.png"
+        />
+      </SelectableButton.ImageContainer>
       {name} (${price})
     </SelectableButton>
   );

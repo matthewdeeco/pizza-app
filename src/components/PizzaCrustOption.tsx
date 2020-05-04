@@ -10,16 +10,18 @@ const PizzaCrustOption: React.FC<{
 }> = ({ name, price, isSelected = false, onClick }) => {
   return (
     <SelectableButton isSelected={isSelected} onClick={() => onClick()}>
-      <img
-        className="selectable-button-img"
-        width="75%"
-        alt=""
-        src={
-          name === 'Thin'
-            ? '/icons8-compress-100.png'
-            : '/icons8-enlarge-100.png'
-        }
-      />
+      <SelectableButton.ImageContainer>
+        <img
+          className="selectable-button-img"
+          width="75%"
+          alt=""
+          src={
+            name === 'Thin'
+              ? '/icons8-compress-100.png'
+              : '/icons8-enlarge-100.png'
+          }
+        />
+      </SelectableButton.ImageContainer>
       {name} (+${price})
     </SelectableButton>
   );
