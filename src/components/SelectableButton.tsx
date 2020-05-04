@@ -22,44 +22,35 @@ const StyledButton = styled.button`
     background-color: ${(props) => props.theme.colors.androidGreen}22;
   }
   &.active {
-    background-color: ${(props) => props.theme.colors.androidGreen}66;
+    background-color: ${(props) => props.theme.colors.androidGreen}55;
   }
   &:hover {
     cursor: pointer;
   }
+
+  .selectable-button-img {
+    width: 4rem;
+    height: 4rem;
+    margin: 0 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 75%;
+  }
 `;
 
-const PizzaImageContainer = styled.div`
-  width: 4rem;
-  height: 4rem;
-  margin: 0 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-export const PizzaSizeButton: React.FC<{
-  name: string;
-  price: number;
-  pizzaSize: string;
-  isSelected: boolean;
+const SelectableButton: React.FC<{
+  isSelected?: boolean;
   onClick: () => void;
-}> = ({ name, price, pizzaSize = '100%', isSelected = false, onClick }) => {
+}> = ({ isSelected = false, onClick, children }) => {
   return (
     <StyledButton
       className={isSelected ? 'active' : ''}
       onClick={() => onClick()}
     >
-      <PizzaImageContainer>
-        <img
-          width={pizzaSize}
-          height={pizzaSize}
-          style={{ opacity: '75%' }}
-          alt=""
-          src="/pizza128.png"
-        />
-      </PizzaImageContainer>
-      {name} (${price})
+      {children}
     </StyledButton>
   );
 };
+
+export default SelectableButton;

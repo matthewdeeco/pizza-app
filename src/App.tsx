@@ -1,7 +1,8 @@
 import { ThemeProvider } from 'emotion-theming';
 import React, { useState } from 'react';
 
-import { PizzaSizeButton } from './components/PizzaSizeButton';
+import PizzaCrustOption from './components/PizzaCrustOption';
+import PizzaSizeOption from './components/PizzaSizeOption';
 import styled from './styled';
 import theme from './theme';
 
@@ -39,7 +40,8 @@ const SelectSizeStepBody = styled.section`
 `;
 
 function App() {
-  const [pizzaSize, setPizzaSize] = useState('');
+  const [pizzaSize, setPizzaSize] = useState(null as null | 'sm' | 'md' | 'lg');
+  const [pizzaCrust, setPizzaCrust] = useState(null as null | 'thin' | 'thick');
 
   return (
     <ThemeProvider theme={theme}>
@@ -47,47 +49,46 @@ function App() {
         <StepSection key="select-size">
           <StepHeading>Select the size of your pizza</StepHeading>
           <SelectSizeStepBody>
-            <PizzaSizeButton
+            <PizzaSizeOption
               name="Small"
               price={8}
               pizzaSize="60%"
               isSelected={pizzaSize === 'sm'}
               onClick={() => setPizzaSize('sm')}
-            ></PizzaSizeButton>
-            <PizzaSizeButton
+            ></PizzaSizeOption>
+            <PizzaSizeOption
               name="Medium"
               price={10}
               pizzaSize="80%"
               isSelected={pizzaSize === 'md'}
               onClick={() => setPizzaSize('md')}
-            ></PizzaSizeButton>
-            <PizzaSizeButton
+            ></PizzaSizeOption>
+            <PizzaSizeOption
               name="Large"
               price={12}
               pizzaSize="100%"
               isSelected={pizzaSize === 'lg'}
               onClick={() => setPizzaSize('lg')}
-            ></PizzaSizeButton>
+            ></PizzaSizeOption>
           </SelectSizeStepBody>
         </StepSection>
+
         {pizzaSize && (
           <StepSection key="select-crust">
             <StepHeading>What crust type do you like?</StepHeading>
             <SelectSizeStepBody>
-              <PizzaSizeButton
+              <PizzaCrustOption
                 name="Thin"
-                price={8}
-                pizzaSize="60%"
-                isSelected={pizzaSize === 'sm'}
-                onClick={() => setPizzaSize('sm')}
-              ></PizzaSizeButton>
-              <PizzaSizeButton
+                price={2}
+                isSelected={pizzaCrust === 'thin'}
+                onClick={() => setPizzaCrust('thin')}
+              ></PizzaCrustOption>
+              <PizzaCrustOption
                 name="Thick"
-                price={10}
-                pizzaSize="80%"
-                isSelected={pizzaSize === 'md'}
-                onClick={() => setPizzaSize('md')}
-              ></PizzaSizeButton>
+                price={4}
+                isSelected={pizzaCrust === 'thick'}
+                onClick={() => setPizzaCrust('thick')}
+              ></PizzaCrustOption>
             </SelectSizeStepBody>
           </StepSection>
         )}
