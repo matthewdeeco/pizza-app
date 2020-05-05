@@ -5,14 +5,14 @@ import SelectableButton from './SelectableButton';
 const PizzaSizeOption: React.FC<{
   name: string;
   price: number;
-  pizzaSize: string;
+  imageSize: string;
   isSelected: boolean;
   onClick: () => void;
-}> = ({ name, price, pizzaSize = '100%', isSelected = false, onClick }) => {
+}> = ({ name, price, imageSize = '100%', isSelected = false, onClick }) => {
   return (
     <SelectableButton isSelected={isSelected} onClick={() => onClick()}>
       <SelectableButton.ImageContainer>
-        <img width={pizzaSize} height={pizzaSize} alt="" src="/pizza128.png" />
+        <img width={imageSize} height={imageSize} alt="" src="/pizza128.png" />
       </SelectableButton.ImageContainer>
       {name} (${price})
     </SelectableButton>

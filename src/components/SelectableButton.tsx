@@ -28,14 +28,18 @@ const StyledButton = styled.button`
   @media (min-width: ${(props) => props.theme.breakpoints.md}) {
     flex-direction: column;
   }
-  &:active, &:hover, &:focus {
+  &:active, &:hover:not(:disabled), &:focus {
     background-color: ${(props) => props.theme.colors.androidGreen}33;
   }
   &.active {
     background-color: ${(props) => props.theme.colors.androidGreen}66;
   }
-  &:hover {
+  &:hover:not(:disabled) {
     cursor: pointer;
+  }
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
   }
 `;
 
@@ -45,13 +49,20 @@ interface SelectableButtonComposition {
 
 const SelectableButton: React.FC<{
   isSelected?: boolean;
+  isDisabled?: boolean;
   onClick: () => void;
 }> &
-  SelectableButtonComposition = ({ isSelected = false, onClick, children }) => {
+  SelectableButtonComposition = ({
+  isSelected = false,
+  isDisabled = false,
+  onClick,
+  children,
+}) => {
   return (
     <StyledButton
       className={isSelected ? 'active' : ''}
       onClick={() => onClick()}
+      disabled={isDisabled}
     >
       {children}
     </StyledButton>
