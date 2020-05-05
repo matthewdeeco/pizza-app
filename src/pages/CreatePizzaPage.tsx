@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
+import PageHeading from '../components/PageHeading';
 import PizzaCrustOption from '../components/PizzaCrustOption';
 import PizzaIngredientOption from '../components/PizzaIngredientOption';
 import PizzaSizeOption from '../components/PizzaSizeOption';
-import { PizzaSize, PizzaCrust, PizzaIngredient } from '../models/pizza';
+import { PizzaSize, PizzaCrust, PizzaIngredient, Pizza } from '../models/pizza';
 import styled from '../styled';
 
 const StepSection = styled.section`
@@ -12,18 +13,9 @@ const StepSection = styled.section`
   padding: 1rem 0.25rem;
 `;
 
-const StepHeading = styled.header`
-  font-family: '${(props) => props.theme.fonts.heading}';
-  font-size: 1.75rem;
-  color: ${(props) => props.theme.colors.androidGreen};
-  margin-bottom: 0.5rem;
-`;
-
-const StepSubheading = styled.header`
-  font-family: '${(props) => props.theme.fonts.heading}';
+const StepSubheading = styled(PageHeading)`
   font-size: 1.25rem;
   color: ${(props) => props.theme.colors.gunmetal}dd;
-  margin-bottom: 0.5rem;
 `;
 
 const StepBody = styled.section`
@@ -36,20 +28,41 @@ const StepBody = styled.section`
   }
 `;
 
-const CreatePizzaRoute: React.FC<{
+const CheckoutButton = styled.button`
+  width: 100%;
+  border: 2px solid ${(props) => props.theme.colors.gunmetal};
+  padding: 1rem 0;
+  font-size: 1.25rem;
+  background-color: ${(props) => props.theme.colors.androidGreen}aa;
+  &:focus,
+  &:hover,
+  &:active {
+    background-color: ${(props) => props.theme.colors.androidGreen};
+    cursor: pointer;
+  }
+`;
+
+const CreatePizzaPage: React.FC<{
   pizzaSizes: Record<PizzaSize['id'], PizzaSize>;
   pizzaCrusts: Record<PizzaCrust['id'], PizzaCrust>;
   ingredients: Record<PizzaIngredient['id'], PizzaIngredient>;
   maxFreeIngredients: number;
   pricePerIngredient: number;
-}> = ({ pizzaSizes, pizzaCrusts, ingredients, maxFreeIngredients, pricePerIngredient }) => {
+  onCheckout: (pizza: Pizza) => void;
+}> = ({
+  pizzaSizes,
+  pizzaCrusts,
+  ingredients,
+  maxFreeIngredients,
+  pricePerIngredient,
+  onCheckout,
+}) => {
   const [selectedPizzaSize, setSelectedPizzaSize] = useState('' as PizzaSize['id']);
   const [selectedPizzaCrust, setSelectedPizzaCrust] = useState('' as PizzaCrust['id']);
   const [selectedIngredients, setSelectedIngredients] = useState([] as PizzaIngredient['id'][]);
 
-  const pizzaSizeIds = Object.keys(pizzaSizes);
-  const pizzaCrustIds = Object.keys(pizzaCrusts);
   const ingredientIds = Object.keys(ingredients);
+  // Divide ingredients into 2 rows for presentation
   const ingredientGroupIds = [
     ingredientIds.slice(0, ingredientIds.length / 2),
     ingredientIds.slice(ingredientIds.length / 2),
@@ -101,46 +114,42 @@ const CreatePizzaRoute: React.FC<{
   return (
     <section>
       <StepSection key="select-size">
-        <StepHeading>Select the size of your pizza</StepHeading>
+        <PageHeading>Select the size of your pizza</PageHeading>
         <StepBody>
-          {pizzaSizeIds
-            .map((id) => pizzaSizes[id])
-            .map((pizzaSize) => (
-              <PizzaSizeOption
-                key={pizzaSize.id}
-                name={pizzaSize.name}
-                price={pizzaSize.price}
-                imageSize={pizzaSize.imageSize}
-                isSelected={selectedPizzaSize === pizzaSize.id}
-                onClick={() => setSelectedPizzaSize(pizzaSize.id)}
-              ></PizzaSizeOption>
-            ))}
+          {Object.values(pizzaSizes).map((pizzaSize) => (
+            <PizzaSizeOption
+              key={pizzaSize.id}
+              name={pizzaSize.name}
+              price={pizzaSize.price}
+              imageSize={pizzaSize.imageSize}
+              isSelected={selectedPizzaSize === pizzaSize.id}
+              onClick={() => setSelectedPizzaSize(pizzaSize.id)}
+            ></PizzaSizeOption>
+          ))}
         </StepBody>
       </StepSection>
 
       {selectedPizzaSize && (
         <StepSection key="select-crust">
-          <StepHeading>Which crust type do you prefer?</StepHeading>
+          <PageHeading>Which crust type do you prefer?</PageHeading>
           <StepBody>
-            {pizzaCrustIds
-              .map((id) => pizzaCrusts[id])
-              .map((pizzaCrust) => (
-                <PizzaCrustOption
-                  key={pizzaCrust.id}
-                  name={pizzaCrust.name}
-                  price={pizzaCrust.price}
-                  imageUrl={pizzaCrust.imageUrl}
-                  isSelected={selectedPizzaCrust === pizzaCrust.id}
-                  onClick={() => setSelectedPizzaCrust(pizzaCrust.id)}
-                ></PizzaCrustOption>
-              ))}
+            {Object.values(pizzaCrusts).map((pizzaCrust) => (
+              <PizzaCrustOption
+                key={pizzaCrust.id}
+                name={pizzaCrust.name}
+                price={pizzaCrust.price}
+                imageUrl={pizzaCrust.imageUrl}
+                isSelected={selectedPizzaCrust === pizzaCrust.id}
+                onClick={() => setSelectedPizzaCrust(pizzaCrust.id)}
+              ></PizzaCrustOption>
+            ))}
           </StepBody>
         </StepSection>
       )}
 
       {selectedPizzaCrust && (
         <StepSection key="select-ingredients">
-          <StepHeading>What ingredients do you want?</StepHeading>
+          <PageHeading>What ingredients do you want?</PageHeading>
           <StepSubheading>
             The first {maxFreeIngredients} ingredients are free; beyond that costs $
             {pricePerIngredient.toFixed(2)} each.
@@ -148,7 +157,11 @@ const CreatePizzaRoute: React.FC<{
           <StepSubheading>
             You can select{' '}
             {pizzaSizes[selectedPizzaSize].maxIngredients - selectedIngredients.length} more
-            ingredient/s.
+            ingredient
+            {pizzaSizes[selectedPizzaSize].maxIngredients - selectedIngredients.length === 1
+              ? ''
+              : 's'}
+            .
           </StepSubheading>
 
           {ingredientGroupIds.map((ingredientIds, index) => (
@@ -172,8 +185,22 @@ const CreatePizzaRoute: React.FC<{
           ))}
         </StepSection>
       )}
+
+      {selectedPizzaCrust && (
+        <CheckoutButton
+          onClick={() =>
+            onCheckout({
+              size: selectedPizzaSize,
+              crust: selectedPizzaCrust,
+              ingredients: selectedIngredients,
+            })
+          }
+        >
+          Proceed to Checkout
+        </CheckoutButton>
+      )}
     </section>
   );
 };
 
-export default CreatePizzaRoute;
+export default CreatePizzaPage;

@@ -18,3 +18,9 @@ export interface PizzaIngredient {
   name: string;
   imageUrl: string;
 }
+
+export interface Pizza {
+  size: PizzaSize['id'];
+  crust: PizzaCrust['id'];
+  ingredients: PizzaIngredient['id'][];
+}
