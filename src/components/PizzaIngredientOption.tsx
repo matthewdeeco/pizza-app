@@ -2,21 +2,20 @@ import React from 'react';
 
 import SelectableButton from './SelectableButton';
 
-const PizzaSizeOption: React.FC<{
+const PizzaIngredientOption: React.FC<{
   name: string;
-  price: number;
-  pizzaSize: string;
+  imageUrl: string;
   isSelected: boolean;
   onClick: () => void;
-}> = ({ name, price, pizzaSize = '100%', isSelected = false, onClick }) => {
+}> = ({ name, imageUrl, isSelected = false, onClick }) => {
   return (
     <SelectableButton isSelected={isSelected} onClick={() => onClick()}>
       <SelectableButton.ImageContainer>
-        <img width={pizzaSize} height={pizzaSize} alt="" src="/pizza128.png" />
+        <img width="90%" alt="" src={imageUrl} />
       </SelectableButton.ImageContainer>
-      {name} (${price})
+      {name}
     </SelectableButton>
   );
 };
 
-export default PizzaSizeOption;
+export default PizzaIngredientOption;

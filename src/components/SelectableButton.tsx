@@ -5,7 +5,7 @@ import styled from '../styled';
 const ImageContainer = styled.div`
   width: 4rem;
   height: 4rem;
-  margin: 0 1rem;
+  margin: 0 1rem 0.25rem 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,12 +13,13 @@ const ImageContainer = styled.div`
 
 const StyledButton = styled.button`
   font-family: '${(props) => props.theme.fonts.body}';
+  white-space: nowrap;
   background-color: ${(props) => props.theme.colors.white};
   color: ${(props) => props.theme.colors.gunmetal};
   border: 1px solid ${(props) => props.theme.colors.gunmetal};
   width: 100%;
-  margin: 0.25rem 1rem;
-  font-size: 1.25rem;
+  margin: 0.5rem;
+  font-size: 1rem;
   display: flex;
   align-items: center;
   padding: 0.5rem;
@@ -28,10 +29,10 @@ const StyledButton = styled.button`
     flex-direction: column;
   }
   &:active, &:hover, &:focus {
-    background-color: ${(props) => props.theme.colors.androidGreen}22;
+    background-color: ${(props) => props.theme.colors.androidGreen}33;
   }
   &.active {
-    background-color: ${(props) => props.theme.colors.androidGreen}55;
+    background-color: ${(props) => props.theme.colors.androidGreen}66;
   }
   &:hover {
     cursor: pointer;
@@ -40,13 +41,13 @@ const StyledButton = styled.button`
 
 interface SelectableButtonComposition {
   ImageContainer: React.FC<{}>;
-
 }
 
 const SelectableButton: React.FC<{
   isSelected?: boolean;
   onClick: () => void;
-}> & SelectableButtonComposition = ({ isSelected = false, onClick, children }) => {
+}> &
+  SelectableButtonComposition = ({ isSelected = false, onClick, children }) => {
   return (
     <StyledButton
       className={isSelected ? 'active' : ''}

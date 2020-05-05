@@ -2,6 +2,7 @@ import { ThemeProvider } from 'emotion-theming';
 import React, { useState } from 'react';
 
 import PizzaCrustOption from './components/PizzaCrustOption';
+import PizzaIngredientOption from './components/PizzaIngredientOption';
 import PizzaSizeOption from './components/PizzaSizeOption';
 import styled from './styled';
 import theme from './theme';
@@ -29,7 +30,14 @@ const StepHeading = styled.header`
   margin-bottom: 0.5rem;
 `;
 
-const SelectSizeStepBody = styled.section`
+const StepSubheading = styled.header`
+  font-family: '${(props) => props.theme.fonts.heading}';
+  font-size: 1.25rem;
+  color: ${(props) => props.theme.colors.gunmetal}dd;
+  margin-bottom: 0.75rem;
+`;
+
+const StepBody = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,16 +47,50 @@ const SelectSizeStepBody = styled.section`
   }
 `;
 
+const FlatIconAttributionFooter = styled.footer`
+  font-size: 0.5rem;
+  color: #f1f1f1;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  text-align: right;
+  z-index: -1;
+  a {
+    text-decoration: none;
+    color: unset;
+  }
+`;
+
 function App() {
-  const [pizzaSize, setPizzaSize] = useState(null as null | 'sm' | 'md' | 'lg');
-  const [pizzaCrust, setPizzaCrust] = useState(null as null | 'thin' | 'thick');
+  const [pizzaSize, setPizzaSize] = useState('md' as null | 'sm' | 'md' | 'lg');
+  const [pizzaCrust, setPizzaCrust] = useState(
+    'thin' as null | 'thin' | 'thick',
+  );
+
+  const ingredients = {
+    pepperoni: { id: 'pepperoni', name: 'Pepperoni', imageUrl: '/ingredients/pepperoni.svg' },
+    mushroom: { id: 'mushroom', name: 'Mushrooms', imageUrl: '/ingredients/mushroom.svg' },
+    onion: { id: 'onion', name: 'Onions', imageUrl: '/ingredients/onion.svg' },
+    sausage: { id: 'sausage', name: 'Sausage', imageUrl: '/ingredients/sausage.svg' },
+    bacon: { id: 'bacon', name: 'Bacon', imageUrl: '/ingredients/bacon.svg' },
+    cheese: { id: 'cheese', name: 'Extra Cheese', imageUrl: '/ingredients/cheese.svg' },
+    olives: { id: 'olives', name: 'Black Olives', imageUrl: '/ingredients/olives.svg' },
+    pepper: { id: 'pepper', name: 'Green Pepper', imageUrl: '/ingredients/green-pepper.svg' },
+    pineapple: { id: 'pineapple', name: 'Pineapple', imageUrl: '/ingredients/pineapple.svg' },
+    spinach: { id: 'spinach', name: 'Spinach', imageUrl: '/ingredients/spinach.svg' },
+  };
+
+  const ingredientIds = [
+    ['pepperoni', 'mushroom', 'onion', 'sausage', 'bacon'],
+    ['cheese', 'olives', 'pepper', 'pineapple', 'spinach'],
+  ] as (keyof typeof ingredients)[][];
 
   return (
     <ThemeProvider theme={theme}>
       <PageContainer>
         <StepSection key="select-size">
           <StepHeading>Select the size of your pizza</StepHeading>
-          <SelectSizeStepBody>
+          <StepBody>
             <PizzaSizeOption
               name="Small"
               price={8}
@@ -70,13 +112,13 @@ function App() {
               isSelected={pizzaSize === 'lg'}
               onClick={() => setPizzaSize('lg')}
             ></PizzaSizeOption>
-          </SelectSizeStepBody>
+          </StepBody>
         </StepSection>
 
         {pizzaSize && (
           <StepSection key="select-crust">
-            <StepHeading>What crust type do you like?</StepHeading>
-            <SelectSizeStepBody>
+            <StepHeading>Which crust type do you prefer?</StepHeading>
+            <StepBody>
               <PizzaCrustOption
                 name="Thin"
                 price={2}
@@ -89,9 +131,101 @@ function App() {
                 isSelected={pizzaCrust === 'thick'}
                 onClick={() => setPizzaCrust('thick')}
               ></PizzaCrustOption>
-            </SelectSizeStepBody>
+            </StepBody>
           </StepSection>
         )}
+
+        {pizzaCrust && (
+          <StepSection key="select-ingredients">
+            <StepHeading>What ingredients do you want?</StepHeading>
+            <StepSubheading>
+              The first 3 ingredients are free; beyond that costs $0.50 each.
+            </StepSubheading>
+            <StepBody>
+              {ingredientIds[0]
+                .map((ingredientId) => ingredients[ingredientId])
+                .map((ingredient) => (
+                  <PizzaIngredientOption
+                    key={ingredient.name}
+                    name={ingredient.name}
+                    imageUrl={ingredient.imageUrl}
+                    isSelected={false}
+                    onClick={() => {console.log(ingredient.name)}}
+                  ></PizzaIngredientOption>
+                ))}
+            </StepBody>
+            <StepBody>
+              {ingredientIds[1]
+                .map((ingredientId) => ingredients[ingredientId])
+                .map((ingredient) => (
+                  <PizzaIngredientOption
+                    key={ingredient.name}
+                    name={ingredient.name}
+                    imageUrl={ingredient.imageUrl}
+                    isSelected={false}
+                    onClick={() => {console.log(ingredient.name)}}
+                  ></PizzaIngredientOption>
+                ))}
+            </StepBody>
+          </StepSection>
+        )}
+
+        <FlatIconAttributionFooter>
+          <header>Attributions:</header>
+          <div>
+            Icons made by{' '}
+            <a href="https://www.flaticon.com/authors/freepik" title="Freepik">
+              Freepik
+            </a>{' '}
+            from{' '}
+            <a href="https://www.flaticon.com/" title="Flaticon">
+              www.flaticon.com
+            </a>
+          </div>
+          <div>
+            Icons made by{' '}
+            <a
+              href="https://www.flaticon.com/authors/smashicons"
+              title="Smashicons"
+            >
+              Smashicons
+            </a>{' '}
+            from{' '}
+            <a href="https://www.flaticon.com/" title="Flaticon">
+              www.flaticon.com
+            </a>
+          </div>
+          <div>
+            Icons made by{' '}
+            <a href="https://www.flaticon.com/authors/turkkub" title="turkkub">
+              turkkub
+            </a>{' '}
+            from{' '}
+            <a href="https://www.flaticon.com/" title="Flaticon">
+              www.flaticon.com
+            </a>
+          </div>
+          <div>
+            Icons made by{' '}
+            <a href="https://www.flaticon.com/authors/pause08" title="Pause08">
+              Pause08
+            </a>{' '}
+            from{' '}
+            <a href="https://www.flaticon.com/" title="Flaticon">
+              www.flaticon.com
+            </a>
+          </div>
+          <div>
+            Icons made by{' '}
+            <a href="https://www.flaticon.com/authors/monkik" title="monkik">
+              monkik
+            </a>{' '}
+            from{' '}
+            <a href="https://www.flaticon.com/" title="Flaticon">
+              www.flaticon.com
+            </a>
+          </div>
+        </FlatIconAttributionFooter>
       </PageContainer>
     </ThemeProvider>
   );
