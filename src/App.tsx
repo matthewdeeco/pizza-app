@@ -108,6 +108,8 @@ const App: React.FC<{}> = () => {
           pizzaSizes={pizzaSizes}
           pizzaCrusts={pizzaCrusts}
           ingredients={ingredients}
+          maxFreeIngredients={3}
+          pricePerIngredient={0.5}
         />
         <AttributionFooter />
       </PageContainer>

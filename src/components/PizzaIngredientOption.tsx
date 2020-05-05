@@ -15,7 +15,7 @@ const PizzaIngredientOption: React.FC<{
       <SelectableButton.ImageContainer>
         <img width="90%" alt="" src={imageUrl} />
       </SelectableButton.ImageContainer>
-      {name} ({price ? `+$${price}` : 'Free'})
+      {name} ({price ? `+$${price.toFixed(2)}` : 'Free'})
     </SelectableButton>
   );
 };

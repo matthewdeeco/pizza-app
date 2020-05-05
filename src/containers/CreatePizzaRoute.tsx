@@ -40,7 +40,9 @@ const CreatePizzaRoute: React.FC<{
   pizzaSizes: Record<PizzaSize['id'], PizzaSize>;
   pizzaCrusts: Record<PizzaCrust['id'], PizzaCrust>;
   ingredients: Record<PizzaIngredient['id'], PizzaIngredient>;
-}> = ({ pizzaSizes, pizzaCrusts, ingredients }) => {
+  maxFreeIngredients: number;
+  pricePerIngredient: number;
+}> = ({ pizzaSizes, pizzaCrusts, ingredients, maxFreeIngredients, pricePerIngredient }) => {
   const [selectedPizzaSize, setSelectedPizzaSize] = useState('' as PizzaSize['id']);
   const [selectedPizzaCrust, setSelectedPizzaCrust] = useState('' as PizzaCrust['id']);
   const [selectedIngredients, setSelectedIngredients] = useState([] as PizzaIngredient['id'][]);
@@ -70,7 +72,6 @@ const CreatePizzaRoute: React.FC<{
   };
 
   const getIngredientPrice = (ingredientId: PizzaIngredient['id']) => {
-    const maxFreeIngredients = 3;
     if (selectedIngredients.length < maxFreeIngredients) {
       return 0;
     }
@@ -78,7 +79,7 @@ const CreatePizzaRoute: React.FC<{
     if (index >= 0 && index < maxFreeIngredients) {
       return 0;
     } else {
-      return 0.5;
+      return pricePerIngredient;
     }
   };
 
@@ -141,7 +142,8 @@ const CreatePizzaRoute: React.FC<{
         <StepSection key="select-ingredients">
           <StepHeading>What ingredients do you want?</StepHeading>
           <StepSubheading>
-            The first 3 ingredients are free; beyond that costs $0.50 each.
+            The first {maxFreeIngredients} ingredients are free; beyond that costs $
+            {pricePerIngredient.toFixed(2)} each.
           </StepSubheading>
           <StepSubheading>
             You can select{' '}
