@@ -1,10 +1,11 @@
 import { ThemeProvider } from 'emotion-theming';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import AttributionFooter from './components/AttributionFooter';
 import PizzaCrustOption from './components/PizzaCrustOption';
 import PizzaIngredientOption from './components/PizzaIngredientOption';
 import PizzaSizeOption from './components/PizzaSizeOption';
+import { PizzaSize, PizzaCrust, PizzaIngredient } from './models/pizza';
 import styled from './styled';
 import theme from './theme';
 
@@ -35,7 +36,7 @@ const StepSubheading = styled.header`
   font-family: '${(props) => props.theme.fonts.heading}';
   font-size: 1.25rem;
   color: ${(props) => props.theme.colors.gunmetal}dd;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 `;
 
 const StepBody = styled.section`
@@ -49,32 +50,42 @@ const StepBody = styled.section`
 `;
 
 function App() {
-  const [selectedPizzaSize, setSelectedPizzaSize] = useState('');
-  const [selectedPizzaCrust, setSelectedPizzaCrust] = useState('');
+  const [selectedPizzaSize, setSelectedPizzaSize] = useState(
+    '' as PizzaSize['id'],
+  );
+  const [selectedPizzaCrust, setSelectedPizzaCrust] = useState(
+    '' as PizzaCrust['id'],
+  );
+  const [selectedIngredients, setSelectedIngredients] = useState(
+    [] as PizzaIngredient['id'][],
+  );
 
-  const pizzaSizes = {
+  const pizzaSizes: Record<PizzaSize['id'], PizzaSize> = {
     sm: {
       id: 'sm',
       name: 'Small',
       price: 8,
       imageSize: '60%',
+      maxIngredients: 5,
     },
     md: {
       id: 'md',
       name: 'Medium',
       price: 10,
       imageSize: '80%',
+      maxIngredients: 7,
     },
     lg: {
       id: 'lg',
       name: 'Large',
       price: 12,
       imageSize: '100%',
+      maxIngredients: 9,
     },
   };
-  const pizzaSizeIds = Object.keys(pizzaSizes) as (keyof typeof pizzaSizes)[];
+  const pizzaSizeIds = Object.keys(pizzaSizes);
 
-  const pizzaCrusts = {
+  const pizzaCrusts: Record<PizzaCrust['id'], PizzaCrust> = {
     thin: {
       id: 'thin',
       name: 'Thin',
@@ -88,11 +99,9 @@ function App() {
       imageUrl: '/icons8-enlarge-100.png',
     },
   };
-  const pizzaCrustIds = Object.keys(
-    pizzaCrusts,
-  ) as (keyof typeof pizzaCrusts)[];
+  const pizzaCrustIds = Object.keys(pizzaCrusts);
 
-  const ingredients = {
+  const ingredients: Record<PizzaIngredient['id'], PizzaIngredient> = {
     pepperoni: {
       id: 'pepperoni',
       name: 'Pepperoni',
@@ -140,7 +149,57 @@ function App() {
   const ingredientGroupIds = [
     ['pepperoni', 'mushroom', 'onion', 'sausage', 'bacon'],
     ['cheese', 'olive', 'pepper', 'pineapple', 'spinach'],
-  ] as (keyof typeof ingredients)[][];
+  ];
+
+  const addIngredient = (ingredientId: PizzaIngredient['id']) => {
+    setSelectedIngredients([...selectedIngredients, ingredientId]);
+  };
+
+  const removeIngredient = (ingredientId: PizzaIngredient['id']) => {
+    setSelectedIngredients(
+      selectedIngredients.filter((id) => id !== ingredientId),
+    );
+  };
+
+  const toggleIngredient = (ingredientId: PizzaIngredient['id']) => {
+    if (selectedIngredients.includes(ingredientId)) {
+      removeIngredient(ingredientId);
+    } else {
+      addIngredient(ingredientId);
+    }
+  };
+
+  const getIngredientPrice = (ingredientId: PizzaIngredient['id']) => {
+    if (selectedIngredients.length < 3) {
+      return 0;
+    }
+    const index = selectedIngredients.indexOf(ingredientId);
+    console.log(selectedIngredients, ingredientId, index);
+    if (index >= 0 && index < 3) {
+      return 0;
+    } else {
+      return 0.5;
+    }
+  };
+
+  const isIngredientEnabled = (ingredientId: PizzaIngredient['id']) => {
+    if (
+      selectedIngredients.length < pizzaSizes[selectedPizzaSize].maxIngredients
+    ) {
+      return true;
+    } else {
+      return selectedIngredients.includes(ingredientId);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      selectedIngredients.length > pizzaSizes[selectedPizzaSize]?.maxIngredients
+    ) {
+      // reset selected ingredients if new pizza size cannot fit all ingredients
+      setSelectedIngredients([]);
+    }
+  }, [selectedPizzaSize, pizzaSizes, selectedIngredients]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -189,6 +248,12 @@ function App() {
             <StepSubheading>
               The first 3 ingredients are free; beyond that costs $0.50 each.
             </StepSubheading>
+            <StepSubheading>
+              You can select{' '}
+              {pizzaSizes[selectedPizzaSize].maxIngredients -
+                selectedIngredients.length}{' '}
+              more ingredient/s.
+            </StepSubheading>
 
             {ingredientGroupIds.map((ingredientIds, index) => (
               <StepBody key={index}>
@@ -198,11 +263,12 @@ function App() {
                     <PizzaIngredientOption
                       key={ingredient.id}
                       name={ingredient.name}
-                      isDisabled={ingredient.id === 'olive'}
+                      price={getIngredientPrice(ingredient.id)}
                       imageUrl={ingredient.imageUrl}
-                      isSelected={false}
+                      isSelected={selectedIngredients.includes(ingredient.id)}
+                      isDisabled={!isIngredientEnabled(ingredient.id)}
                       onClick={() => {
-                        console.log(ingredient.id);
+                        toggleIngredient(ingredient.id);
                       }}
                     ></PizzaIngredientOption>
                   ))}

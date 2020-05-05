@@ -31,7 +31,7 @@ const StyledButton = styled.button`
   &:active, &:hover:not(:disabled), &:focus {
     background-color: ${(props) => props.theme.colors.androidGreen}33;
   }
-  &.active {
+  &.active:not(:disabled) {
     background-color: ${(props) => props.theme.colors.androidGreen}66;
   }
   &:hover:not(:disabled) {

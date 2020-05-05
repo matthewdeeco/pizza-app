@@ -4,11 +4,19 @@ import SelectableButton from './SelectableButton';
 
 const PizzaIngredientOption: React.FC<{
   name: string;
+  price: number;
   imageUrl: string;
   isSelected: boolean;
   isDisabled: boolean;
   onClick: () => void;
-}> = ({ name, imageUrl, isSelected = false, isDisabled = false, onClick }) => {
+}> = ({
+  name,
+  price,
+  imageUrl,
+  isSelected = false,
+  isDisabled = false,
+  onClick,
+}) => {
   return (
     <SelectableButton
       isSelected={isSelected}
@@ -18,7 +26,7 @@ const PizzaIngredientOption: React.FC<{
       <SelectableButton.ImageContainer>
         <img width="90%" alt="" src={imageUrl} />
       </SelectableButton.ImageContainer>
-      {name}
+      {name} ({price ? `+$${price}` : 'Free'})
     </SelectableButton>
   );
 };
