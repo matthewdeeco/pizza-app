@@ -9,20 +9,9 @@ const PizzaIngredientOption: React.FC<{
   isSelected: boolean;
   isDisabled: boolean;
   onClick: () => void;
-}> = ({
-  name,
-  price,
-  imageUrl,
-  isSelected = false,
-  isDisabled = false,
-  onClick,
-}) => {
+}> = ({ name, price, imageUrl, isSelected = false, isDisabled = false, onClick }) => {
   return (
-    <SelectableButton
-      isSelected={isSelected}
-      isDisabled={isDisabled}
-      onClick={() => onClick()}
-    >
+    <SelectableButton isSelected={isSelected} isDisabled={isDisabled} onClick={() => onClick()}>
       <SelectableButton.ImageContainer>
         <img width="90%" alt="" src={imageUrl} />
       </SelectableButton.ImageContainer>

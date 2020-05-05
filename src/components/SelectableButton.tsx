@@ -52,12 +52,7 @@ const SelectableButton: React.FC<{
   isDisabled?: boolean;
   onClick: () => void;
 }> &
-  SelectableButtonComposition = ({
-  isSelected = false,
-  isDisabled = false,
-  onClick,
-  children,
-}) => {
+  SelectableButtonComposition = ({ isSelected = false, isDisabled = false, onClick, children }) => {
   return (
     <StyledButton
       className={isSelected ? 'active' : ''}

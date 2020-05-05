@@ -12,12 +12,7 @@ const PizzaCrustOption: React.FC<{
   return (
     <SelectableButton isSelected={isSelected} onClick={() => onClick()}>
       <SelectableButton.ImageContainer>
-        <img
-          className="selectable-button-img"
-          width="75%"
-          alt=""
-          src={imageUrl}
-        />
+        <img className="selectable-button-img" width="75%" alt="" src={imageUrl} />
       </SelectableButton.ImageContainer>
       {name} (+${price})
     </SelectableButton>
