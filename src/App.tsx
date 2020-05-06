@@ -5,7 +5,7 @@ import { RootState } from 'typesafe-actions';
 
 import AttributionFooter from './components/AttributionFooter';
 import { AppStatus } from './models/app-status';
-import { Pizza, PizzaCrust, PizzaIngredient, PizzaSize } from './models/pizza';
+import { Pizza } from './models/pizza';
 import CheckoutPage from './pages/CheckoutPage';
 import CreatePizzaPage from './pages/CreatePizzaPage';
 import ThankYouPage from './pages/ThankYouPage';
@@ -28,6 +28,9 @@ function mapStateToProps(state: RootState) {
   return {
     pizza: state.pizza,
     appStatus: state.appStatus,
+    pizzaSizes: state.pizzaSizes,
+    pizzaCrusts: state.pizzaCrusts,
+    pizzaToppings: state.pizzaToppings,
   };
 }
 
@@ -35,89 +38,8 @@ const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type AppProps = PropsFromRedux & {};
 
-const App: React.FC<AppProps> = ({ pizza, appStatus }) => {
+const App: React.FC<AppProps> = ({ pizza, appStatus, pizzaSizes, pizzaCrusts, pizzaToppings }) => {
   const dispatch = useDispatch();
-
-  const pizzaSizes: Record<PizzaSize['id'], PizzaSize> = {
-    sm: {
-      id: 'sm',
-      name: 'Small',
-      price: 8,
-      maxIngredients: 5,
-    },
-    md: {
-      id: 'md',
-      name: 'Medium',
-      price: 10,
-      maxIngredients: 7,
-    },
-    lg: {
-      id: 'lg',
-      name: 'Large',
-      price: 12,
-      maxIngredients: 9,
-    },
-  };
-
-  const pizzaCrusts: Record<PizzaCrust['id'], PizzaCrust> = {
-    thin: {
-      id: 'thin',
-      name: 'Thin',
-      price: 2,
-      imageUrl: '/icons8-compress-100.png',
-    },
-    thick: {
-      id: 'thick',
-      name: 'Thick',
-      price: 4,
-      imageUrl: '/icons8-enlarge-100.png',
-    },
-  };
-
-  const ingredients: Record<PizzaIngredient['id'], PizzaIngredient> = {
-    pepperoni: {
-      id: 'pepperoni',
-      name: 'Pepperoni',
-      imageUrl: '/ingredients/pepperoni.svg',
-    },
-    mushroom: {
-      id: 'mushroom',
-      name: 'Mushrooms',
-      imageUrl: '/ingredients/mushroom.svg',
-    },
-    onion: { id: 'onion', name: 'Onions', imageUrl: '/ingredients/onion.svg' },
-    sausage: {
-      id: 'sausage',
-      name: 'Sausage',
-      imageUrl: '/ingredients/sausage.svg',
-    },
-    bacon: { id: 'bacon', name: 'Bacon', imageUrl: '/ingredients/bacon.svg' },
-    cheese: {
-      id: 'cheese',
-      name: 'Extra Cheese',
-      imageUrl: '/ingredients/cheese.svg',
-    },
-    olive: {
-      id: 'olive',
-      name: 'Black Olives',
-      imageUrl: '/ingredients/olives.svg',
-    },
-    pepper: {
-      id: 'pepper',
-      name: 'Green Pepper',
-      imageUrl: '/ingredients/green-pepper.svg',
-    },
-    pineapple: {
-      id: 'pineapple',
-      name: 'Pineapple',
-      imageUrl: '/ingredients/pineapple.svg',
-    },
-    spinach: {
-      id: 'spinach',
-      name: 'Spinach',
-      imageUrl: '/ingredients/spinach.svg',
-    },
-  };
 
   const checkoutPizza = (pizza: Pizza) => {
     dispatch(actions.checkoutPizza(pizza));
@@ -143,9 +65,9 @@ const App: React.FC<AppProps> = ({ pizza, appStatus }) => {
             pizza={pizza}
             pizzaSizes={pizzaSizes}
             pizzaCrusts={pizzaCrusts}
-            ingredients={ingredients}
-            maxFreeIngredients={3}
-            pricePerIngredient={0.5}
+            ingredients={pizzaToppings.ingredients}
+            maxFreeToppings={pizzaToppings.maxFreeToppings}
+            pricePerTopping={pizzaToppings.pricePerTopping}
             onCheckout={checkoutPizza}
           />
         )}
@@ -154,7 +76,7 @@ const App: React.FC<AppProps> = ({ pizza, appStatus }) => {
             pizza={pizza}
             pizzaSizes={pizzaSizes}
             pizzaCrusts={pizzaCrusts}
-            ingredients={ingredients}
+            ingredients={pizzaToppings.ingredients}
             onBack={editPizza}
             onConfirm={confirmOrder}
           />

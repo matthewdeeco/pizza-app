@@ -40,16 +40,16 @@ const CreatePizzaPage: React.FC<{
   pizzaSizes: Record<PizzaSize['id'], PizzaSize>;
   pizzaCrusts: Record<PizzaCrust['id'], PizzaCrust>;
   ingredients: Record<PizzaIngredient['id'], PizzaIngredient>;
-  maxFreeIngredients: number;
-  pricePerIngredient: number;
+  maxFreeToppings: number;
+  pricePerTopping: number;
   onCheckout: (pizza: Pizza) => void;
 }> = ({
   pizza,
   pizzaSizes,
   pizzaCrusts,
   ingredients,
-  maxFreeIngredients,
-  pricePerIngredient,
+  maxFreeToppings,
+  pricePerTopping,
   onCheckout,
 }) => {
   const [selectedPizzaSize, setSelectedPizzaSize] = useState(pizza.size as PizzaSize['id']);
@@ -84,14 +84,14 @@ const CreatePizzaPage: React.FC<{
   };
 
   const getIngredientPrice = (ingredientId: PizzaIngredient['id']) => {
-    if (selectedIngredients.length < maxFreeIngredients) {
+    if (selectedIngredients.length < maxFreeToppings) {
       return 0;
     }
     const index = selectedIngredients.indexOf(ingredientId);
-    if (index >= 0 && index < maxFreeIngredients) {
+    if (index >= 0 && index < maxFreeToppings) {
       return 0;
     } else {
-      return pricePerIngredient;
+      return pricePerTopping;
     }
   };
 
@@ -150,8 +150,8 @@ const CreatePizzaPage: React.FC<{
         <StepSection key="select-ingredients">
           <PageHeading>What ingredients do you want?</PageHeading>
           <StepSubheading>
-            The first {maxFreeIngredients} ingredients are free; beyond that costs $
-            {pricePerIngredient.toFixed(2)} each.
+            The first {maxFreeToppings} ingredients are free; beyond that costs $
+            {pricePerTopping.toFixed(2)} each.
           </StepSubheading>
           <StepSubheading>
             You can select{' '}
