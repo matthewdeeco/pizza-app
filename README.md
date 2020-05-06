@@ -27,7 +27,7 @@ Special care was put into:
   - accessibility (navigable via keyboard)
   - observing unidirectional data flow
   - breaking down reusable components
-  - maintaining a flat, non-redundant data structure
+  - maintaining a flat, noninde-redundant data structure
 
 Potential improvements include:
   - moving hardcoded data in `reducers.ts` to a dedicated backend
