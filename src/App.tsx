@@ -43,21 +43,18 @@ const App: React.FC<AppProps> = ({ pizza, appStatus }) => {
       id: 'sm',
       name: 'Small',
       price: 8,
-      imageSize: '66%',
       maxIngredients: 5,
     },
     md: {
       id: 'md',
       name: 'Medium',
       price: 10,
-      imageSize: '83%',
       maxIngredients: 7,
     },
     lg: {
       id: 'lg',
       name: 'Large',
       price: 12,
-      imageSize: '100%',
       maxIngredients: 9,
     },
   };

@@ -5,7 +5,7 @@ import SelectableButton from './SelectableButton';
 const PizzaSizeOption: React.FC<{
   name: string;
   price: number;
-  imageSize: string;
+  imageSize?: string | undefined;
   isSelected: boolean;
   onClick: () => void;
 }> = ({ name, price, imageSize = '100%', isSelected = false, onClick }) => {

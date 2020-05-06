@@ -58,6 +58,8 @@ const CreatePizzaPage: React.FC<{
     pizza.ingredients || ([] as PizzaIngredient['id'][]),
   );
 
+  const maxPrice = Math.max(...Object.values(pizzaSizes).map((size) => size.price));
+
   const ingredientIds = Object.keys(ingredients);
   // Divide ingredients into 2 rows for presentation
   const ingredientGroupIds = [
@@ -118,7 +120,7 @@ const CreatePizzaPage: React.FC<{
               key={pizzaSize.id}
               name={pizzaSize.name}
               price={pizzaSize.price}
-              imageSize={pizzaSize.imageSize}
+              imageSize={`${(pizzaSize.price / maxPrice) * 100}%`}
               isSelected={selectedPizzaSize === pizzaSize.id}
               onClick={() => setSelectedPizzaSize(pizzaSize.id)}
             ></PizzaSizeOption>

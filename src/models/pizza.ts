@@ -2,8 +2,8 @@ export interface PizzaSize {
   id: string;
   name: string;
   price: number;
-  imageSize: string;
   maxIngredients: number;
+  imageSize?: string;
 }
 
 export interface PizzaCrust {
