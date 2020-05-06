@@ -45,7 +45,7 @@ const App: React.FC<AppProps> = ({ pizza, appStatus, pizzaSizes, pizzaCrusts, pi
   };
 
   const confirmOrder = () => {
-    dispatch(actions.confirmOrder());
+    dispatch(actions.confirmOrder(pizza));
   };
 
   const editPizza = () => {

@@ -35,6 +35,7 @@ export const appStatusReducer = (
   }
 };
 
+// By putting these constants here, we make it easy to move the data to the backend
 export const pizzaSizes = (
   state = {
     sm: {
