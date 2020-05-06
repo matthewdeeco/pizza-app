@@ -1,8 +1,10 @@
 import React from 'react';
 
+import ActionButton from '../components/ActionButton';
 import PageHeading from '../components/PageHeading';
 import { Pizza, PizzaSize, PizzaCrust, PizzaIngredient } from '../models/pizza';
 import styled from '../styled';
+import theme from '../theme';
 
 const PageTitle = styled.header`
   font-size: 1.25rem;
@@ -36,29 +38,6 @@ const PizzaIngredientImage = styled.img`
 const ActionsFooter = styled.footer`
   display: flex;
   justify-content: center;
-`;
-
-const BackButton = styled.button`
-  border: 2px solid ${(props) => props.theme.colors.gunmetal};
-  padding: 1rem;
-  margin: 1rem;
-  font-size: 1.25rem;
-  background-color: ${(props) => props.theme.colors.flame}aa;
-  &:focus,
-  &:hover,
-  &:active {
-    background-color: ${(props) => props.theme.colors.flame};
-    cursor: pointer;
-  }
-`;
-
-const ConfirmButton = styled(BackButton)`
-  background-color: ${(props) => props.theme.colors.androidGreen}aa;
-  &:focus,
-  &:hover,
-  &:active {
-    background-color: ${(props) => props.theme.colors.androidGreen};
-  }
 `;
 
 const CheckoutPage: React.FC<{
@@ -101,8 +80,10 @@ const CheckoutPage: React.FC<{
         .
       </PageHeading>
       <ActionsFooter>
-        <BackButton onClick={onBack}>Back</BackButton>
-        <ConfirmButton onClick={onConfirm}>Place order</ConfirmButton>
+        <ActionButton backgroundColor={theme.colors.flame} onClick={onBack}>
+          Back
+        </ActionButton>
+        <ActionButton onClick={onConfirm}>Place order</ActionButton>
       </ActionsFooter>
     </div>
   );

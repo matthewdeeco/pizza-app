@@ -1,13 +1,17 @@
 import { ThemeProvider } from 'emotion-theming';
-import React, { useState } from 'react';
+import React from 'react';
+import { connect, ConnectedProps, useDispatch } from 'react-redux';
+import { RootState } from 'typesafe-actions';
 
 import AttributionFooter from './components/AttributionFooter';
+import { AppStatus } from './models/app-status';
 import { Pizza, PizzaCrust, PizzaIngredient, PizzaSize } from './models/pizza';
 import CheckoutPage from './pages/CheckoutPage';
 import CreatePizzaPage from './pages/CreatePizzaPage';
+import ThankYouPage from './pages/ThankYouPage';
+import * as actions from './store/actions';
 import styled from './styled';
 import theme from './theme';
-import ThankYouPage from './pages/ThankYouPage';
 
 const PageContainer = styled.section`
   padding: 1rem 0;
@@ -20,19 +24,19 @@ const PageContainer = styled.section`
   font-family: '${(props) => props.theme.fonts.body}';
 `;
 
-enum AppStatus {
-  CREATE_PIZZA,
-  CHECKOUT_PIZZA,
-  ORDER_CONFIRMED,
+function mapStateToProps(state: RootState) {
+  return {
+    pizza: state.pizza,
+    appStatus: state.appStatus,
+  };
 }
 
-const App: React.FC<{}> = () => {
-  const [pizza, setPizza] = useState({
-    size: 'sm',
-    crust: 'thick',
-    ingredients: ['spinach', 'pepperoni'],
-  } as Pizza);
-  const [appStatus, setAppStatus] = useState(AppStatus.CHECKOUT_PIZZA);
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type AppProps = PropsFromRedux & {};
+
+const App: React.FC<AppProps> = ({ pizza, appStatus }) => {
+  const dispatch = useDispatch();
 
   const pizzaSizes: Record<PizzaSize['id'], PizzaSize> = {
     sm: {
@@ -119,8 +123,15 @@ const App: React.FC<{}> = () => {
   };
 
   const checkoutPizza = (pizza: Pizza) => {
-    setPizza(pizza);
-    setAppStatus(AppStatus.CHECKOUT_PIZZA);
+    dispatch(actions.checkoutPizza(pizza));
+  };
+
+  const confirmOrder = () => {
+    dispatch(actions.confirmOrder());
+  };
+
+  const editPizza = () => {
+    dispatch(actions.editPizza());
   };
 
   return (
@@ -145,17 +156,15 @@ const App: React.FC<{}> = () => {
             pizzaSizes={pizzaSizes}
             pizzaCrusts={pizzaCrusts}
             ingredients={ingredients}
-            onBack={() => setAppStatus(AppStatus.CREATE_PIZZA)}
-            onConfirm={() => setAppStatus(AppStatus.ORDER_CONFIRMED)}
+            onBack={editPizza}
+            onConfirm={confirmOrder}
           />
         )}
-        {appStatus === AppStatus.ORDER_CONFIRMED && (
-          <ThankYouPage onRestart={() => setAppStatus(AppStatus.CREATE_PIZZA)}  />
-        )}
+        {appStatus === AppStatus.ORDER_CONFIRMED && <ThankYouPage onRestart={editPizza} />}
         <AttributionFooter />
       </PageContainer>
     </ThemeProvider>
   );
 };
 
-export default App;
+export default connector(App);

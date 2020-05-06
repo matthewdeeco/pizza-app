@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+import ActionButton from '../components/ActionButton';
 import PageHeading from '../components/PageHeading';
 import PizzaCrustOption from '../components/PizzaCrustOption';
 import PizzaIngredientOption from '../components/PizzaIngredientOption';
@@ -28,18 +29,10 @@ const StepBody = styled.section`
   }
 `;
 
-const CheckoutButton = styled.button`
+const CheckoutButton = styled(ActionButton)`
   width: 100%;
-  border: 2px solid ${(props) => props.theme.colors.gunmetal};
   padding: 1rem 0;
-  font-size: 1.25rem;
-  background-color: ${(props) => props.theme.colors.androidGreen}aa;
-  &:focus,
-  &:hover,
-  &:active {
-    background-color: ${(props) => props.theme.colors.androidGreen};
-    cursor: pointer;
-  }
+  margin: 0;
 `;
 
 const CreatePizzaPage: React.FC<{
