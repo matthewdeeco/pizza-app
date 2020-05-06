@@ -2,12 +2,12 @@ import { ThemeProvider } from 'emotion-theming';
 import React, { useState } from 'react';
 
 import AttributionFooter from './components/AttributionFooter';
-import PageHeading from './components/PageHeading';
 import { Pizza, PizzaCrust, PizzaIngredient, PizzaSize } from './models/pizza';
 import CheckoutPage from './pages/CheckoutPage';
 import CreatePizzaPage from './pages/CreatePizzaPage';
 import styled from './styled';
 import theme from './theme';
+import ThankYouPage from './pages/ThankYouPage';
 
 const PageContainer = styled.section`
   padding: 1rem 0;
@@ -39,14 +39,14 @@ const App: React.FC<{}> = () => {
       id: 'sm',
       name: 'Small',
       price: 8,
-      imageSize: '60%',
+      imageSize: '66%',
       maxIngredients: 5,
     },
     md: {
       id: 'md',
       name: 'Medium',
       price: 10,
-      imageSize: '80%',
+      imageSize: '83%',
       maxIngredients: 7,
     },
     lg: {
@@ -127,16 +127,18 @@ const App: React.FC<{}> = () => {
     <ThemeProvider theme={theme}>
       <PageContainer>
         {/* We use `display: none` here so that the state doesn't reset when going back from checkout */}
-        <div style={{ display: appStatus === AppStatus.CREATE_PIZZA ? 'block' : 'none' }}>
-          <CreatePizzaPage
-            pizzaSizes={pizzaSizes}
-            pizzaCrusts={pizzaCrusts}
-            ingredients={ingredients}
-            maxFreeIngredients={3}
-            pricePerIngredient={0.5}
-            onCheckout={checkoutPizza}
-          />
-        </div>
+        {appStatus < AppStatus.ORDER_CONFIRMED && (
+          <div style={{ display: appStatus === AppStatus.CREATE_PIZZA ? 'block' : 'none' }}>
+            <CreatePizzaPage
+              pizzaSizes={pizzaSizes}
+              pizzaCrusts={pizzaCrusts}
+              ingredients={ingredients}
+              maxFreeIngredients={3}
+              pricePerIngredient={0.5}
+              onCheckout={checkoutPizza}
+            />
+          </div>
+        )}
         {appStatus === AppStatus.CHECKOUT_PIZZA && (
           <CheckoutPage
             pizza={pizza}
@@ -148,10 +150,7 @@ const App: React.FC<{}> = () => {
           />
         )}
         {appStatus === AppStatus.ORDER_CONFIRMED && (
-          <section>
-            <PageHeading>Thank you for your order! </PageHeading>
-            <small>P.S. Don&apos;t forget to interview Matthew!</small>
-          </section>
+          <ThankYouPage onRestart={() => setAppStatus(AppStatus.CREATE_PIZZA)}  />
         )}
         <AttributionFooter />
       </PageContainer>
