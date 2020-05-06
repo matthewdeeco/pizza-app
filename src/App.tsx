@@ -134,21 +134,23 @@ const App: React.FC<AppProps> = ({ pizza, appStatus }) => {
     dispatch(actions.editPizza());
   };
 
+  const createPizza = () => {
+    dispatch(actions.createPizza());
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <PageContainer>
-        {/* We use `display: none` here so that the state doesn't reset when going back from checkout */}
-        {appStatus < AppStatus.ORDER_CONFIRMED && (
-          <div style={{ display: appStatus === AppStatus.CREATE_PIZZA ? 'block' : 'none' }}>
-            <CreatePizzaPage
-              pizzaSizes={pizzaSizes}
-              pizzaCrusts={pizzaCrusts}
-              ingredients={ingredients}
-              maxFreeIngredients={3}
-              pricePerIngredient={0.5}
-              onCheckout={checkoutPizza}
-            />
-          </div>
+        {appStatus === AppStatus.CREATE_PIZZA && (
+          <CreatePizzaPage
+            pizza={pizza}
+            pizzaSizes={pizzaSizes}
+            pizzaCrusts={pizzaCrusts}
+            ingredients={ingredients}
+            maxFreeIngredients={3}
+            pricePerIngredient={0.5}
+            onCheckout={checkoutPizza}
+          />
         )}
         {appStatus === AppStatus.CHECKOUT_PIZZA && (
           <CheckoutPage
@@ -160,7 +162,7 @@ const App: React.FC<AppProps> = ({ pizza, appStatus }) => {
             onConfirm={confirmOrder}
           />
         )}
-        {appStatus === AppStatus.ORDER_CONFIRMED && <ThankYouPage onRestart={editPizza} />}
+        {appStatus === AppStatus.ORDER_CONFIRMED && <ThankYouPage onRestart={createPizza} />}
         <AttributionFooter />
       </PageContainer>
     </ThemeProvider>

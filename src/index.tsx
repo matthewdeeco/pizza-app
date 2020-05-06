@@ -1,9 +1,9 @@
 import React from 'react';
-import { Middleware, createStore, applyMiddleware } from 'redux';
-import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
-import thunk from 'redux-thunk';
+import { Provider } from 'react-redux';
+import { Middleware, createStore, applyMiddleware } from 'redux';
 import { createLogger } from 'redux-logger';
+import thunk from 'redux-thunk';
 
 import './index.css';
 import App from './App';

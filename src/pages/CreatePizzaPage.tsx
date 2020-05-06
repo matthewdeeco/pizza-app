@@ -36,6 +36,7 @@ const CheckoutButton = styled(ActionButton)`
 `;
 
 const CreatePizzaPage: React.FC<{
+  pizza: Pizza;
   pizzaSizes: Record<PizzaSize['id'], PizzaSize>;
   pizzaCrusts: Record<PizzaCrust['id'], PizzaCrust>;
   ingredients: Record<PizzaIngredient['id'], PizzaIngredient>;
@@ -43,6 +44,7 @@ const CreatePizzaPage: React.FC<{
   pricePerIngredient: number;
   onCheckout: (pizza: Pizza) => void;
 }> = ({
+  pizza,
   pizzaSizes,
   pizzaCrusts,
   ingredients,
@@ -50,9 +52,11 @@ const CreatePizzaPage: React.FC<{
   pricePerIngredient,
   onCheckout,
 }) => {
-  const [selectedPizzaSize, setSelectedPizzaSize] = useState('' as PizzaSize['id']);
-  const [selectedPizzaCrust, setSelectedPizzaCrust] = useState('' as PizzaCrust['id']);
-  const [selectedIngredients, setSelectedIngredients] = useState([] as PizzaIngredient['id'][]);
+  const [selectedPizzaSize, setSelectedPizzaSize] = useState(pizza.size as PizzaSize['id']);
+  const [selectedPizzaCrust, setSelectedPizzaCrust] = useState(pizza.crust as PizzaCrust['id']);
+  const [selectedIngredients, setSelectedIngredients] = useState(
+    pizza.ingredients || ([] as PizzaIngredient['id'][]),
+  );
 
   const ingredientIds = Object.keys(ingredients);
   // Divide ingredients into 2 rows for presentation
