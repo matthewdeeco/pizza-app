@@ -35,8 +35,7 @@ function mapStateToProps(state: RootState) {
 }
 
 const connector = connect(mapStateToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type AppProps = PropsFromRedux & {};
+type AppProps = ConnectedProps<typeof connector>;
 
 const App: React.FC<AppProps> = ({ pizza, appStatus, pizzaSizes, pizzaCrusts, pizzaToppings }) => {
   const dispatch = useDispatch();

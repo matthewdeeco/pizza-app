@@ -41,19 +41,19 @@ export const pizzaSizes = (
       id: 'sm',
       name: 'Small',
       price: 8,
-      maxIngredients: 5,
+      maxToppings: 5,
     },
     md: {
       id: 'md',
       name: 'Medium',
       price: 10,
-      maxIngredients: 7,
+      maxToppings: 7,
     },
     lg: {
       id: 'lg',
       name: 'Large',
       price: 12,
-      maxIngredients: 9,
+      maxToppings: 9,
     },
   } as Record<PizzaSize['id'], PizzaSize>,
 ) => state;

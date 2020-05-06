@@ -54,8 +54,8 @@ const CreatePizzaPage: React.FC<{
 }) => {
   const [selectedPizzaSize, setSelectedPizzaSize] = useState(pizza.size as PizzaSize['id']);
   const [selectedPizzaCrust, setSelectedPizzaCrust] = useState(pizza.crust as PizzaCrust['id']);
-  const [selectedIngredients, setSelectedIngredients] = useState(
-    pizza.ingredients || ([] as PizzaIngredient['id'][]),
+  const [selectedToppings, setSelectedToppings] = useState(
+    pizza.toppings || ([] as PizzaIngredient['id'][]),
   );
 
   const maxPrice = Math.max(...Object.values(pizzaSizes).map((size) => size.price));
@@ -67,27 +67,27 @@ const CreatePizzaPage: React.FC<{
     ingredientIds.slice(ingredientIds.length / 2),
   ];
 
-  const addIngredient = (ingredientId: PizzaIngredient['id']) => {
-    setSelectedIngredients([...selectedIngredients, ingredientId]);
+  const addTopping = (ingredientId: PizzaIngredient['id']) => {
+    setSelectedToppings([...selectedToppings, ingredientId]);
   };
 
-  const removeIngredient = (ingredientId: PizzaIngredient['id']) => {
-    setSelectedIngredients(selectedIngredients.filter((id) => id !== ingredientId));
+  const removeTopping = (ingredientId: PizzaIngredient['id']) => {
+    setSelectedToppings(selectedToppings.filter((id) => id !== ingredientId));
   };
 
-  const toggleIngredient = (ingredientId: PizzaIngredient['id']) => {
-    if (selectedIngredients.includes(ingredientId)) {
-      removeIngredient(ingredientId);
+  const toggleTopping = (ingredientId: PizzaIngredient['id']) => {
+    if (selectedToppings.includes(ingredientId)) {
+      removeTopping(ingredientId);
     } else {
-      addIngredient(ingredientId);
+      addTopping(ingredientId);
     }
   };
 
   const getIngredientPrice = (ingredientId: PizzaIngredient['id']) => {
-    if (selectedIngredients.length < maxFreeToppings) {
+    if (selectedToppings.length < maxFreeToppings) {
       return 0;
     }
-    const index = selectedIngredients.indexOf(ingredientId);
+    const index = selectedToppings.indexOf(ingredientId);
     if (index >= 0 && index < maxFreeToppings) {
       return 0;
     } else {
@@ -96,19 +96,19 @@ const CreatePizzaPage: React.FC<{
   };
 
   const isIngredientEnabled = (ingredientId: PizzaIngredient['id']) => {
-    if (selectedIngredients.length < pizzaSizes[selectedPizzaSize].maxIngredients) {
+    if (selectedToppings.length < pizzaSizes[selectedPizzaSize].maxToppings) {
       return true;
     } else {
-      return selectedIngredients.includes(ingredientId);
+      return selectedToppings.includes(ingredientId);
     }
   };
 
   useEffect(() => {
-    if (selectedIngredients.length > pizzaSizes[selectedPizzaSize]?.maxIngredients) {
+    if (selectedToppings.length > pizzaSizes[selectedPizzaSize]?.maxToppings) {
       // reset selected ingredients if new pizza size cannot fit all ingredients
-      setSelectedIngredients([]);
+      setSelectedToppings([]);
     }
-  }, [selectedPizzaSize, pizzaSizes, selectedIngredients]);
+  }, [selectedPizzaSize, pizzaSizes, selectedToppings]);
 
   return (
     <section>
@@ -154,13 +154,9 @@ const CreatePizzaPage: React.FC<{
             {pricePerTopping.toFixed(2)} each.
           </StepSubheading>
           <StepSubheading>
-            You can select{' '}
-            {pizzaSizes[selectedPizzaSize].maxIngredients - selectedIngredients.length} more
-            ingredient
-            {pizzaSizes[selectedPizzaSize].maxIngredients - selectedIngredients.length === 1
-              ? ''
-              : 's'}
-            .
+            You can select {pizzaSizes[selectedPizzaSize].maxToppings - selectedToppings.length}{' '}
+            more ingredient
+            {pizzaSizes[selectedPizzaSize].maxToppings - selectedToppings.length === 1 ? '' : 's'}.
           </StepSubheading>
 
           {ingredientGroupIds.map((ingredientIds, index) => (
@@ -173,10 +169,10 @@ const CreatePizzaPage: React.FC<{
                     name={ingredient.name}
                     price={getIngredientPrice(ingredient.id)}
                     imageUrl={ingredient.imageUrl}
-                    isSelected={selectedIngredients.includes(ingredient.id)}
+                    isSelected={selectedToppings.includes(ingredient.id)}
                     isDisabled={!isIngredientEnabled(ingredient.id)}
                     onClick={() => {
-                      toggleIngredient(ingredient.id);
+                      toggleTopping(ingredient.id);
                     }}
                   ></PizzaIngredientOption>
                 ))}
@@ -191,7 +187,7 @@ const CreatePizzaPage: React.FC<{
             onCheckout({
               size: selectedPizzaSize,
               crust: selectedPizzaCrust,
-              ingredients: selectedIngredients,
+              toppings: selectedToppings,
             })
           }
         >

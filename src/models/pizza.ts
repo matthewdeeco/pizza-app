@@ -2,7 +2,7 @@ export interface PizzaSize {
   id: string;
   name: string;
   price: number;
-  maxIngredients: number;
+  maxToppings: number;
   imageSize?: string;
 }
 
@@ -22,5 +22,5 @@ export interface PizzaIngredient {
 export interface Pizza {
   size: PizzaSize['id'];
   crust: PizzaCrust['id'];
-  ingredients: PizzaIngredient['id'][];
+  toppings: PizzaIngredient['id'][];
 }

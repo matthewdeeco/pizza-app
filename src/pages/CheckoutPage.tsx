@@ -57,10 +57,10 @@ const CheckoutPage: React.FC<{
           {pizzaSizes[pizza.size].name.toLowerCase()} {pizzaCrusts[pizza.crust].name.toLowerCase()}
           -crust pizza
         </OrderDetail>{' '}
-        with {pizza.ingredients.length > 0 ? 'these toppings:' : 'no toppings.'}
+        with {pizza.toppings.length > 0 ? 'these toppings:' : 'no toppings.'}
       </PageHeading>
       <StepBody>
-        {pizza.ingredients.map((ingredientId) => (
+        {pizza.toppings.map((ingredientId) => (
           <li key={ingredientId}>
             <PizzaIngredientImage src={ingredients[ingredientId].imageUrl}></PizzaIngredientImage>
             {ingredients[ingredientId].name}
@@ -74,7 +74,7 @@ const CheckoutPage: React.FC<{
           {(
             pizzaSizes[pizza.size].price +
             pizzaCrusts[pizza.crust].price +
-            Math.max(0, pizza.ingredients.length - 3) * 0.5
+            Math.max(0, pizza.toppings.length - 3) * 0.5
           ).toFixed(2)}
         </OrderDetail>
         .
